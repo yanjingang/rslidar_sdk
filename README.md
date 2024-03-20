@@ -1,22 +1,21 @@
 # 1 **rslidar_sdk**
 
- [中文介绍](README_CN.md) 
+[English Version](README.md) 
 
 
 
-## 1 Introduction
+## 1.1 工程简介
 
-**rslidar_sdk** is the Software Development Kit of the RoboSense Lidar based on Ubuntu. It contains:
+ **rslidar_sdk** 是速腾聚创在Ubuntu环境下的雷达驱动软件包。它包括：
+ + 雷达驱动内核[rs_driver](https://github.com/RoboSense-LiDAR/rs_driver)， 
+ + ROS拓展功能，
+ + ROS2拓展功能
 
-+ The lidar driver core [rs_driver](https://github.com/RoboSense-LiDAR/rs_driver),
-+ The ROS support, 
-+ The ROS2 support,
+如果希望基于ROS/ROS2进行二次开发，可以使用本软件包。配合ROS/ROS2自带的可视化工具rviz，可以查看点云。 
 
-To get point cloud through ROS/ROS2,  please just use this SDK. 
+如果希望将雷达驱动集成到自己的工程，作更深一步的二次开发，请基于rs_driver进行开发。
 
-To integrate the Lidar driver into your own projects, please use the rs_driver.
-
-### 1.1 LiDAR Supported
+### 1.1.1 支持的雷达型号
 
 - RS-LiDAR-16
 - RS-LiDAR-32
@@ -33,81 +32,78 @@ To integrate the Lidar driver into your own projects, please use the rs_driver.
 - RS-LiDAR-M2
 - RS-LiDAR-E1
 
-### 1.2 Point Type Supported
+### 1.1.2 支持的点类型
 
 - XYZI - x, y, z, intensity
 - XYZIRT - x, y, z, intensity, ring, timestamp
 
 
 
-## 2 Download
+## 1.2 下载
 
-### 2.1 Download via Git 
+### 1.2.1 使用 git clone
 
-Download the rslidar_sdk as below. Since it contains the submodule rs_driver, please also use `git submodule` to download the submodule properly.
+rslidar_sdk项目包含子模块驱动内核rs_driver。在执行git clone后，还需要执行相关指令，初始化并更新子模块。
 
-
-```sh
+  ```sh
 git clone https://github.com/RoboSense-LiDAR/rslidar_sdk.git
 cd rslidar_sdk
 git submodule init
 git submodule update
-```
+  ```
 
-### 2.2 Download directly
+### 1.2.2 直接下载
 
-Instead of using Git, user can also access [rslidar_sdk_release](https://github.com/RoboSense-LiDAR/rslidar_sdk/releases) to download the latest version of rslidar_sdk. 
+用户可以直接访问  [rslidar_sdk_release](https://github.com/RoboSense-LiDAR/rslidar_sdk/releases) 下载最新版本的rslidar_sdk. 
 
-Please download the **rslidar_sdk.tar.gz** archive instead of Source code. The Source code zip file does not contain the submodule rs_driver, so it has to be downloaded manaully.
+请下载 **rslidar_sdk.tar.gz** 压缩包，不要下载Source code。因为Source code压缩包内不包含子模块rs_driver的代码， 用户还需自行下载rs_driver的代码放入其中才行。
 ![](./img/01_01_download_page.png)
 
 
 
-## 3 Dependencies
+## 1.3 依赖介绍
 
-### 3.1 ROS
+### 1.3.1 ROS 
 
-To run rslidar_sdk in the ROS environment, please install below libraries. 
+在ROS环境下使用雷达驱动，需要安装ROS相关依赖库。
 + Ubuntu 16.04 - ROS Kinetic desktop
 + Ubuntu 18.04 - ROS Melodic desktop
 + Ubuntu 20.04 - ROS Noetic desktop
 
-For installation, please refer to http://wiki.ros.org.
+安装方法请参考 http://wiki.ros.org。
 
-**It's highly recommanded to install ros-distro-desktop-full**. If you do so, the corresponding libraries, such as PCL, will be installed at the same time. 
+**强烈建议安装ROS desktop-full版。这个过程会自动安装一些兼容版本的依赖库，如PCL库等。这样可以避免花大量时间，去逐个安装和配置它们**。
 
-This brings a lot of convenience, since you don't have to handle version conflict.
+### 1.3.2 ROS2
 
-### 3.2 ROS2
-
-To use rslidar_sdk in the ROS2 environment, please install below libraries.
-+ Ubuntu 16.04 - Not supported
+在ROS2环境下使用雷达驱动，需要安装ROS2相关依赖库。
++ Ubuntu 16.04 - 不支持
 + Ubuntu 18.04 - ROS2 Eloquent desktop
 + Ubuntu 20.04 - ROS2 Galactic desktop
 + Ubuntu 22.04 - ROS2 Humble desktop
 
-For installation, please refer to https://index.ros.org/doc/ros2/Installation/Eloquent/Linux-Install-Debians/
+安装方法请参考 https://index.ros.org/doc/ros2/Installation/Eloquent/Linux-Install-Debians/
 
-**Please do not install ROS and ROS2 on the same computer, to avoid possible conflict and manually install some libraries, such as Yaml.**
+**请不要在一台电脑上同时安装ROS和ROS2，以避免可能的版本冲突，和手工安装其他库（如Yaml）的麻烦。**
 
-### 3.3 Yaml (Essential) 
+### 1.3.3 Yaml (必需)
 
-version: >= v0.5.2
+版本号:  >= v0.5.2 
 
-*If ros-distro-desktop-full is installed, this step can be skipped*
+*若已安装ROS desktop-full, 可跳过*
 
-Installation:
+安装方法如下:
 
 ```sh
 sudo apt-get update
 sudo apt-get install -y libyaml-cpp-dev
 ```
 
-### 3.4 libpcap (Essential) 
+### 1.3.4 libpcap (必需)
 
-version: >= v1.7.4
+版本号： >= v1.7.4
 
-Installation:
+安装方法如下：
 
 ```sh
 sudo apt-get install -y  libpcap-dev
@@ -115,13 +111,13 @@ sudo apt-get install -y  libpcap-dev
 
 
 
-## 4 Compile & Run
+## 1.4 编译、运行
 
-Please compile and run the driver in three ways.
+可以使用三种方式编译、运行rslidar_sdk。
 
-### 4.1 Compile directly
+### 1.4.1 直接编译
 
-(1) On top of the file *CMakeLists.txt*，set the variable **COMPILE_METHOD** to **ORIGINAL**.
+(1) 打开工程内的*CMakeLists.txt*文件，将文件顶部的变量**COMPILE_METHOD**改为**ORIGINAL**.
 
 ```cmake
 #=======================================
@@ -130,9 +126,9 @@ Please compile and run the driver in three ways.
 set(COMPILE_METHOD ORIGINAL)
 ```
 
-(2) In ROS (unfortunately not ROS2), user can compile it directly. 
+(2) 在ROS1（不适用于ROS2）中，直接编译、运行程序。 
 
-Please laucn ROS master node ```roscore``` in advance, and use ```rviz``` to visualize point cloud.
+请先启动**roscore**，再运行**rslidar_sdk_node**，最后运行**rviz**查看点云。
 
 ```sh
 cd rslidar_sdk
@@ -141,9 +137,10 @@ cmake .. && make -j4
 ./rslidar_sdk_node
 ```
 
-### 4.2 Compile with ROS catkin tools
+### 1.4.2 依赖于ROS-catkin编译
 
-(1) On top of the file *CMakeLists.txt*，set the variable **COMPILE_METHOD** to **CATKIN**.
+(1) 打开工程内的*CMakeLists.txt*文件，将文件顶部的变量**COMPILE_METHOD**改为**CATKIN**.
+
 
 ```cmake
 #=======================================
@@ -152,11 +149,11 @@ cmake .. && make -j4
 set(COMPILE_METHOD CATKIN)
 ```
 
-(2) Copy the file *package_ros1.xml*  to *package.xml* in the rslidar_sdk .
+(2) 将rslidar_sdk工程目录下的*package_ros1.xml*文件复制到*package.xml*。
 
-(3) Create a new workspace folder, and create a *src* folder in it. Then put the rslidar_sdk project into the *src* folder.
+(3) 新建一个文件夹作为工作空间，然后再新建一个名为*src*的文件夹, 将rslidar_sdk工程放入*src*文件夹内。
 
-(4) Go back to the root of workspace, run the following commands to compile and run. (if using zsh, replace the 2nd command with *source devel/setup.zsh*).
+(4) 返回工作空间目录，执行以下命令即可编译、运行。如果使用.zsh，将第二行替换成 *source devel/setup.zsh*。
 
 ```sh
 catkin_make
@@ -164,9 +161,9 @@ source devel/setup.bash
 roslaunch rslidar_sdk start.launch
 ```
 
-### 4.3 Compile with ROS2 colcon
+### 1.4.3 依赖于ROS2-colcon编译
 
-(1) On top of the file *CMakeLists.txt*，set the variable **COMPILE_METHOD** to **COLCON**.
+(1) 打开工程内的*CMakeLists.txt*文件，将文件顶部的变量**COMPILE_METHOD**改为**COLCON**.
 
 ```cmake
 #=======================================
@@ -175,13 +172,13 @@ roslaunch rslidar_sdk start.launch
 set(COMPILE_METHOD COLCON)
 ```
 
-(2) Copy the file *package_ros2.xml* to *package.xml* in the rslidar_sdk. 
+(2) 将rslidar_sdk工程目录下的*package_ros2.xml*文件重命名为*package.xml*。
 
-(3) Create a new workspace folder, and create a *src* folder in it. Then put the rslidar_sdk project in the *src* folder.
+(3) 新建一个文件夹作为工作空间，然后再新建一个名为*src*的文件夹, 将rslidar_sdk工程放入*src*文件夹内。
 
-(4) Download the packet definition project in ROS2 through [link](https://github.com/RoboSense-LiDAR/rslidar_msg), then put the project rslidar_msg in the *src* folder you just created.
+(4) 通过[链接](https://github.com/RoboSense-LiDAR/rslidar_msg)，下载ROS2环境下的雷达packet消息定义，将rslidar_msg工程也放在刚刚新建的*src*文件夹内，与rslidar_sdk并列。
 
-(5) Go back to the root of workspace, run the following commands to compile and run. (if using zsh, replace the 2nd command with *source install/setup.zsh*).
+(5) 返回工作空间目录，执行以下命令即可编译、运行。如果使用.zsh，将第二行替换为*source install/setup.zsh*。
 
 ```sh
 colcon build
@@ -189,41 +186,39 @@ source install/setup.bash
 ros2 launch rslidar_sdk start.py
 ```
 
-Another version of start.py may be used, since it is different on different versios of ROS2. For example, elequent_start.py is used instead for ROS2 elequent.
+不同ROS2版本start.py的格式可能不同，请使用对应版本的start.py。如ROS2 Elequent，请使用elequent_start.py。
 
 
 
-## 5 Introduction to parameters
+## 1.5 参数介绍
 
-To change behaviors of rslidar_sdk, change its parameters. please read the following links for detail information.
+rslidar_sdk的功能通过配置参数文件来实现，请仔细阅读。 
 
-[Intro to parameters](doc/intro/02_parameter_intro.md)
+[参数介绍](doc/intro/02_parameter_intro_CN.md)
 
-[Intro to hidden parameters](doc/intro/03_hiding_parameters_intro.md)
-
-
-
-## 6 Quick start
-
-Below are some quick guides to use rslidar_sdk. 
-
-[Connect to online LiDAR and send point cloud through ROS](doc/howto/06_how_to_decode_online_lidar.md)
-
-[Decode PCAP file and send point cloud through ROS](doc/howto/08_how_to_decode_pcap_file.md)
-
-[Change Point Type](doc/howto/05_how_to_change_point_type.md) 
+[隐藏参数介绍](doc/intro/03_hiding_parameters_intro_CN.md)
 
 
 
-## 7 Advanced Topics
+## 1.6 快速上手
 
-[Online Lidar - Advanced topics](doc/howto/07_online_lidar_advanced_topics.md) 
+以下是一些常用功能的使用指南。
 
-[PCAP file - Advanced topics](doc/howto/09_pcap_file_advanced_topics.md) 
+[连接在线雷达数据并发送点云到ROS](doc/howto/06_how_to_decode_online_lidar_CN.md)
 
-[Coordinate Transformation](doc/howto/10_how_to_use_coordinate_transformation.md) 
+[解析PCAP包并发送点云到ROS](doc/howto/08_how_to_decode_pcap_file_CN.md)
 
-[Record rosbag & Replay it](doc/howto/11_how_to_record_replay_packet_rosbag.md)
+[切换点类型](doc/howto/05_how_to_change_point_type_CN.md) 
 
 
+
+## 1.7 使用进阶
+
+[在线雷达-高级主题](doc/howto/07_online_lidar_advanced_topics_CN.md) 
+
+[PCAP文件-高级主题](doc/howto/09_pcap_file_advanced_topics_CN.md) 
+
+[点云坐标变换](doc/howto/10_how_to_use_coordinate_transformation_CN.md) 
+
+[录制ROS数据包然后播放它](doc/howto/11_how_to_record_replay_packet_rosbag_CN.md)
 
